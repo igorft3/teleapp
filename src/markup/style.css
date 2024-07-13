@@ -12,102 +12,7 @@ body {
   overflow: overlay;
 }
 
-.sidebar {
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
-  padding: 20px 15px;
-  border-right: 2px solid rgba(128, 128, 128, 0.21);
-}
-
-.sidebar__list {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  list-style: none;
-}
-
-.sidebar__search {
-  box-sizing: border-box;
-  margin-bottom: 20px;
-  width: 80%;
-  background-color: #f2f2f2;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
-}
-
-.sidebar__item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 20px;
-  border-radius: 15px;
-  transition: color 0.3s ease, background-color 0.3s ease;
-  cursor: pointer;
-}
-
-.sidebar__item:hover {
-  background-color: #f2f2f2;
-}
-
-.sidebar__item:hover .status::after {
-  border: 1px solid #f2f2f2;
-}
-
-.sidebar__item:active {
-  background-color: #000;
-  color: #fff;
-}
-
-.sidebar__item:active .status::after {
-  border: 1px solid black;
-}
-
-.active {
-  background-color: #000;
-  color: #fff;
-}
-
-.active .status::after {
-  border: 1px solid black;
-}
-
-.sidebar__item:active .sidebar__wrapp {
-}
-
-.sidebar__avatar-status {
-  /* display: flex; */
-}
-.sidebar__avatar {
-}
-.avatar {
-}
-.sidebar__wrapp {
-}
-.sidebar__user-name {
-  margin: 0;
-  margin-bottom: 5px;
-  font-size: 20px;
-  font-weight: 400;
-}
-.sidebar__message {
-  max-width: 60%;
-  margin: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: 13px;
-  font-weight: 100;
-}
-.addressee {
-  text-transform: uppercase;
-  margin-right: 5px;
-}
+/* ДО СЕДОВА  */
 .chat__header {
   display: flex;
   flex-direction: row;
@@ -168,10 +73,10 @@ body {
     #99ceff;
 }
 
-.chat__call:active,
+/* .chat__call:active,
 .chat__call:focus {
-  /* white icon */
-}
+  white icon
+} */
 
 .body {
   padding: 10px 25px;
