@@ -1,6 +1,4 @@
 <script>
-// import { UserButton } from "vue-clerk";
-
 let id = 0;
 
 export default {

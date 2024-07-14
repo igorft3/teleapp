@@ -9,6 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5",
+    "socket.io-client": "^4.7.5",
     "vue": "^3.4.29",
     "vue-clerk": "^0.4.8"
   },

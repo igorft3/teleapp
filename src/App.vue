@@ -3,8 +3,6 @@ import Sidebar from "./components/Sidebar.vue";
 import ChatPage from "./components/ChatPage.vue";
 import LogIn from "./components/LogIn.vue";
 import { SignedIn, SignedOut, SignInButton } from "vue-clerk";
-
-// import { reactive } from "vue";
 </script>
 
 <template>
@@ -15,9 +13,7 @@ import { SignedIn, SignedOut, SignInButton } from "vue-clerk";
         <SignInButton />
       </SignedOut>
       <SignedIn>
-        <Sidebar>
-          <!-- <UserButton /> -->
-        </Sidebar>
+        <Sidebar> </Sidebar>
         <ChatPage />
       </SignedIn>
     </section>

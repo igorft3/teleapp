@@ -1,4 +1,85 @@
-<script></script>
+<script>
+import io from "socket.io-client";
+let socket = io();
+let id = 0;
+
+export default {
+  data() {
+    return {
+      newMessage: null,
+      messages: [],
+      typing: false,
+      username: null,
+      ready: false,
+      info: [],
+      connections: 0,
+    };
+  },
+  created() {
+    window.onbeforeunload = () => {
+      socket.emit("leave", this.username);
+    };
+
+    socket.on("chat-message", (data) => {
+      this.messages.push({
+        message: data.message,
+        type: 1,
+        user: data.user,
+      });
+    });
+    socket.on("typing", (data) => {
+      this.typing = data;
+    });
+    socket.on("stopTyping", () => {
+      this.typing = false;
+    });
+    socket.on("joined", (data) => {
+      this.info.push({
+        username: data,
+        type: "joined",
+      });
+      setTimeout(() => {
+        this.info = [];
+      }, 5000);
+    });
+    socket.on("leave", (data) => {
+      this.info.push({
+        username: data,
+        type: "left",
+      });
+      setTimeout(() => {
+        this.info = [];
+      }, 5000);
+    });
+    socket.on("connections", (data) => {
+      this.connections = data;
+    });
+  },
+  watch: {
+    newMessage(value) {
+      value ? socket.emit("typing", this.username) : socket.emit("stopTyping");
+    },
+  },
+  methods: {
+    send() {
+      this.messages.push({
+        message: this.newMessage,
+        type: 0,
+        user: "Me",
+      });
+      socket.emit("chat-message", {
+        message: this.newMessage,
+        user: this.username,
+      });
+      this.newMessage = null;
+    },
+    addUser() {
+      this.ready = true;
+      socket.emit("joined", this.username);
+    },
+  },
+};
+</script>
 
 <template>
   <section class="chat__page">
@@ -19,7 +100,11 @@
     <div class="chat__body body">
       <div class="body__container">
         <ul class="body__list">
-          <li class="body__item">
+          <li
+            v-for="(message, index) in messages"
+            :key="index"
+            class="body__item"
+          >
             <img
               src="../assets/avatar-img.png"
               alt=""
@@ -27,188 +112,11 @@
             />
             <div class="body__wrapp">
               <div class="body__inner">
-                <p class="body__user-name">You:</p>
-                <span class="user-time">11:00 AM</span>
+                <p class="body__user-name">{{ message.user }}</p>
+                <span class="user-time">{{ new Date().toLocaleString() }}</span>
               </div>
               <div class="body__message">
-                <p class="body__message-text">Hi,how are you:</p>
-              </div>
-            </div>
-          </li>
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">Rick Sanchez</p>
-                <span class="user-time">11:10 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">Hi i'm fine and u?</p>
-              </div>
-            </div>
-          </li>
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">You:</p>
-                <span class="user-time">11:20 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">good, maybe let's meet again?</p>
-              </div>
-            </div>
-          </li>
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">You:</p>
-                <span class="user-time">11:20 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">good, maybe let's meet again?</p>
-              </div>
-            </div>
-          </li>
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">You:</p>
-                <span class="user-time">11:20 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">good, maybe let's meet again?</p>
-              </div>
-            </div>
-          </li>
-
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">You:</p>
-                <span class="user-time">11:20 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">good, maybe let's meet again?</p>
-              </div>
-            </div>
-          </li>
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">You:</p>
-                <span class="user-time">11:20 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">good, maybe let's meet again?</p>
-              </div>
-            </div>
-          </li>
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">You:</p>
-                <span class="user-time">11:20 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">good, maybe let's meet again?</p>
-              </div>
-            </div>
-          </li>
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">You:</p>
-                <span class="user-time">11:20 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">good, maybe let's meet again?</p>
-              </div>
-            </div>
-          </li>
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">You:</p>
-                <span class="user-time">11:20 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">good, maybe let's meet again?</p>
-              </div>
-            </div>
-          </li>
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">You:</p>
-                <span class="user-time">11:20 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">good, maybe let's meet again?</p>
-              </div>
-            </div>
-          </li>
-          <li class="body__item">
-            <img
-              src="../assets/avatar-img.png"
-              alt=""
-              class="body__img avatar"
-            />
-            <div class="body__wrapp">
-              <div class="body__inner">
-                <p class="body__user-name">Rick Sanchez</p>
-                <span class="user-time">11:30 AM</span>
-              </div>
-              <div class="body__message">
-                <p class="body__message-text">songs good</p>
+                <p class="body__message-text">{{ message.message }}</p>
               </div>
             </div>
           </li>
@@ -216,14 +124,21 @@
       </div>
     </div>
     <div class="chat__write-container">
-      <textarea class="chat__input" placeholder="Write something..."></textarea>
-      <button class="chat__btn">Send</button>
+      <textarea
+        v-model="newMessage"
+        class="chat__input"
+        placeholder="Write something..."
+      ></textarea>
+      <button class="chat__btn" @click="send">Send</button>
     </div>
   </section>
 </template>
 
 <style scoped>
 .chat__page {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   flex: 1;
   height: 100vh;
   overflow: overlay;
